@@ -14,7 +14,7 @@ on:
       
 jobs:
   build:
-    environment: ${{ github.event.client_payload.ref }} 
+    environment: ${{ github.event.client_payload.ref == '' && 'test' || github.event.client_payload.ref }} 
     runs-on: ubuntu-latest
 
     steps:
