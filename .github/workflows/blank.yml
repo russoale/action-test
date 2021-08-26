@@ -7,14 +7,16 @@ on:
     branches:
       - main
       - test
+      - si
   repository_dispatch:
     types:
       - main
       - test
+      - si
       
 jobs:
   build:
-    environment: ${{ github.event.client_payload.ref == '' && 'test' || github.event.client_payload.ref }} 
+    environment: ${{ github.event.client_payload.ref == '' && github.ref || github.event.client_payload.ref }} 
     runs-on: ubuntu-latest
 
     steps:
@@ -23,4 +25,10 @@ jobs:
           ref: ${{ github.event.client_payload.ref }}
 
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: |
+          echo "${{ github.event }}"
+          echo "${{ github.event.client_payload.ref }}"
+          echo "${{ github.ref }}"
+          echo "stage $ECHO!"
+        env:
+          ECHO: ${{secrets.ECHO}}
