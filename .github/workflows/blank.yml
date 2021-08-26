@@ -26,9 +26,9 @@ jobs:
 
       - name: Run a one-line script
         run: |
-          echo "$github.event"
-          echo "$github.event.client_payload.ref"
-          echo "$github.ref"
+          echo "${{ github.event }}"
+          echo "${{ github.event.client_payload.ref }}"
+          echo "${{ github.ref }}"
           echo "stage $ECHO!"
         env:
           ECHO: ${{secrets.ECHO}}
