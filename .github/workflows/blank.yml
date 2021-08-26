@@ -26,6 +26,7 @@ jobs:
 
       - name: Run a one-line script
         run: |
+          echo "teeeeeeessssst"
           echo "${{ github.event }}"
           echo "${{ github.event.client_payload.ref }}"
           echo "${{ github.ref }}"
