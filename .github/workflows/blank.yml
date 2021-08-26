@@ -30,6 +30,7 @@ jobs:
           echo "teeeeeeessssst"
           echo "si gets this change next"
           echo "${{ github.event }}"
+          echo "${{ github.branch }}"
           echo "${{ github.event.client_payload.ref }}"
           echo "${{ github.ref }}"
           if [ "$ECHO" == "si" ]; then echo "si"; else echo "test"; fi
