@@ -31,6 +31,6 @@ jobs:
           echo "${{ github.event }}"
           echo "${{ github.event.client_payload.ref }}"
           echo "${{ github.ref }}"
-          echo "stage $ECHO!"
+          if [$ECHO == "si"]; echo "si"; ekse echo "test"; fi
         env:
           ECHO: ${{secrets.ECHO}}
