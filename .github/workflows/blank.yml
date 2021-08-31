@@ -35,8 +35,6 @@ jobs:
           echo "Event: ${{ github.event }}"
           echo "Ref: ${{ github.ref }}"
           echo "Branch: ${{ github.branch }}"
-          echo "${{ github.ref#refs/heads/ }}"
-          echo "Branch: ${{ GITHUB_REF#refs/heads/ }}"
           echo "${{ github.event.client_payload }}"
         env:
           ECHO: ${{secrets.ECHO}}
@@ -49,8 +47,6 @@ jobs:
           echo "Event: ${{ github.event. }}"
           echo "Ref: ${{ github.ref }}"
           echo "Branch: ${{ github.branch }}"
-          echo "${github.ref#refs/heads/}"
-          echo "Branch: ${GITHUB_REF#refs/heads/}"
-          echo "${{ github.event.client_payload.ref }}"
+          echo "${{ github.event.client_payload }}"
         env:
           ECHO: ${{secrets.ECHO}}
