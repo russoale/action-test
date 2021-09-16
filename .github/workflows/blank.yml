@@ -31,6 +31,7 @@ jobs:
         if: github.event_name == 'push'
         shell: bash
         run: |
+          echo "${{ github.ref == 'refs/heads/test' && 'alpha' || 'beta' }}"
           echo "Event Name: ${{ github.event_name }}"
           echo "Event: ${{ github.event }}"
           echo "Ref: ${{ github.ref }}"
@@ -43,7 +44,6 @@ jobs:
         if: github.event_name == 'repository_dispatch'
         shell: bash
         run: |
-          echo "${{ github.ref == 'refs/heads/test' && 'alpha' || 'beta' }}"
           echo "Event Name: ${{ github.event_name }}"
           echo "Event: ${{ github.event }}"
           echo "Ref: ${{ github.ref }}"
