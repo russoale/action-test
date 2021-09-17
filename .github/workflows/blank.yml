@@ -27,7 +27,7 @@ jobs:
       - name: Extract branch name
         id: extract
         run: |
-          echo [[ github.event_name == 'push' ]] && "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})" || "##[set-output name=branch;]$(echo ${{github.event.client_payload.env}})"
+          echo [[ github.event_name -eq 'push' ]] && "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})" || "##[set-output name=branch;]$(echo ${{github.event.client_payload.env}})"
 
   print:
     needs: environment
