@@ -35,7 +35,7 @@ jobs:
 
   jobD: # THIS DOESN'T RUN BECUASE IT JUST DEPENDS ON JOB C
     name: This should run if jobC runs (JobD)
-    needs: [jobA, jobB, jobC]
+    needs: [jobA, jobB]
     if: |
       always() && !contains(needs.*.result, 'cancelled') &&
       (${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/si' }})
