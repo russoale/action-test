@@ -37,7 +37,7 @@ jobs:
     name: This should run if jobC runs (JobD)
     needs: [jobA, jobB, jobC]
     if: |
-      always() &&
+      always() && !contains(needs.*.result, 'cancelled') &&
       (${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/si' }})
     runs-on: ubuntu-latest
     steps:
