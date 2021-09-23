@@ -29,12 +29,12 @@ jobs:
     if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     steps:
-      - run: echo always() && !contains(needs.*.result, 'cancelled') && (${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/si' }})
+      - run: echo always() && !contains(needs.*.result, 'cancelled') && contains(github.ref, 'main') || contains(github.ref, 'si')
     
   jobD: # THIS DOESN'T RUN BECUASE IT JUST DEPENDS ON JOB C
     name: This should run if jobC runs (JobD)
     needs: [jobA, jobB]
-    if: always() && !contains(needs.*.result, 'cancelled') && (${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/si' }})
+    if: always() && !contains(needs.*.result, 'cancelled') && contains(github.ref, 'main') || contains(github.ref, 'si')
     runs-on: ubuntu-latest
     steps:
       - run: env
