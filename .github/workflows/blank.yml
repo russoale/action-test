@@ -2,47 +2,51 @@
 name: Test
 
 on:
-  - pull_request
   - push
 
 jobs:
-  jobA:
-    name: This will always runs (JobA)
+  determine-environment:
     runs-on: ubuntu-latest
-    steps:
-      - run: echo jobA
     outputs:
-      runs: ${{ true }}
+      env: ${{ steps.extract.outputs.env }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-  jobB:
-    name: This will be always skipped (JobB)
-    needs:
-      - jobA
-    if: ${{ false }} 
-    runs-on: ubuntu-latest
-    steps:
-      - run: env
+      - name: Extract environment
+        id: extract
+        run: >
+          if [[ ${{ github.event_name }} == 'push' ]];
+          then echo "##[set-output name=env;]$(echo ${GITHUB_REF#refs/heads/})";
+          else echo "##[set-output name=env;]$(echo ${{github.event.client_payload.env}})";
+          fi
 
-  jobC:
-    name: This will always run (JobC)
-    needs: [jobA, jobB]
-    if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
+  print:
     runs-on: ubuntu-latest
+    needs: determine-environment
     steps:
-      - run: echo always() && !contains(needs.*.result, 'cancelled') && contains(github.ref, 'main') || contains(github.ref, 'si')
-    
-  jobD: # THIS DOESN'T RUN BECUASE IT JUST DEPENDS ON JOB C
-    name: This should run if jobC runs (JobD)
-    needs: [jobA, jobB]
-    if: always() && !contains(needs.*.result, 'cancelled') && contains(github.ref, 'main') || contains(github.ref, 'si')
-    runs-on: ubuntu-latest
-    steps:
-      - run: env
+      - name: Print
+        if: ${{ github.ref == 'refs/heads/test' }}
+        run: echo "executed"
 
-  jobE:
-    name: This should run if jobD runs (jobE)
+  auto-merge:
     runs-on: ubuntu-latest
-    needs:
-      - jobD
+    needs: determine-environment
     steps:
-      - run: env
+      - name: Configure git
+        run: |
+          git --version
+          git config user.name "bot"
+          git config user.email "bot@bot.com"
+          git fetch --all --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.CELOBOT_GITHUB_TOKEN }}
+
+      - name: Merge
+        shell: bash
+        run: |
+          git checkout -b ${{ github.ref == 'refs/heads/test' && 'si' || 'main' }} || git checkout ${{ github.ref == 'refs/heads/test' && 'si' || 'main' }}
+          git merge ${{ github.ref == 'refs/heads/test' && 'test' || 'si' }} --ff-only
+          git push origin ${{ github.ref == 'refs/heads/test' && 'si' || 'main' }} --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.CELOBOT_GITHUB_TOKEN }}
