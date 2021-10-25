@@ -43,7 +43,7 @@ jobs:
           git config user.email "bot@bot.com"
           git fetch --all --tags
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
 
       - name: Merge
         shell: bash
@@ -52,4 +52,4 @@ jobs:
           git merge ${{ github.ref == 'refs/heads/test' && 'test' || 'si' }} --ff-only
           git push origin ${{ github.ref == 'refs/heads/test' && 'si' || 'main' }} --force
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
