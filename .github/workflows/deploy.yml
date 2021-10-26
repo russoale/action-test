@@ -55,7 +55,7 @@ jobs:
           fi
 
 
-  print:
+  delpoy:
     runs-on: ubuntu-latest
     needs: config
     environment: ${{ needs.config.outputs.env }}
@@ -72,3 +72,12 @@ jobs:
 
       - name: e2e
         run: echo "${{ needs.config.outputs.e2e }}"
+  
+  e2e:
+    runs-on: ubuntu-latest
+    needs: delpoy
+    environment: ${{ needs.config.outputs.env }}
+    if: ${{ needs.config.outputs.e2e }}
+    steps:
+      - name: e2e
+        run: echo "run e2e"
