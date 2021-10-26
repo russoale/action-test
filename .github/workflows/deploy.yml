@@ -33,25 +33,25 @@ jobs:
       - name: Determine env
         id: env
         run: >
-          if [[ ${{ github.event_name }} == 'workflow_call' ]];
-          then echo "##[set-output name=env;]$(echo ${{inputs.env}})";
-          else echo "##[set-output name=env;]$(echo ${{github.event.client_payload.env}})";
+          if [[ ${{ github.event_name }} == 'repository_dispatch' ]];
+          then echo "##[set-output name=env;]$(echo ${{github.event.client_payload.env}})";
+          else echo "##[set-output name=env;]$(echo ${{inputs.env}})";
           fi
 
       - name: Determine branch
         id: branch
         run: >
-          if [[ ${{ github.event_name }} == 'workflow_call' ]];
-          then echo "##[set-output name=branch;]$(echo ${{inputs.branch}})";
-          else echo "##[set-output name=branch;]$(echo ${{github.event.client_payload.branch}})";
+          if [[ ${{ github.event_name }} == 'repository_dispatch' ]];
+          then echo "##[set-output name=branch;]$(echo ${{github.event.client_payload.branch}})";
+          else echo "##[set-output name=branch;]$(echo ${{inputs.branch}})";
           fi
 
       - name: Determine e2e
         id: e2e
         run: >
-          if [[ ${{ github.event_name }} == 'workflow_call' ]];
-          then echo "##[set-output name=e2e;]$(echo ${{inputs.e2e}})";
-          else echo "##[set-output name=e2e;]$(echo ${{github.event.client_payload.e2e}})";
+          if [[ ${{ github.event_name }} == 'repository_dispatch' ]];
+          then echo "##[set-output name=e2e;]$(echo ${{github.event.client_payload.e2e}})";
+          else echo "##[set-output name=e2e;]$(echo ${{inputs.e2e}})";
           fi
 
 
