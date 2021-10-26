@@ -19,21 +19,18 @@ jobs:
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       env: develop
-      branch: develop
-      e2e: true
   
   alpha:
     needs: develop
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       env: alpha
-      branch: alpha
-      e2e: false
+      e2e: true
 
   beta:
     needs: alpha
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       env: beta
-      branch: beta
+      branch: master
       e2e: true

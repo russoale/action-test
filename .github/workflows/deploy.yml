@@ -10,7 +10,7 @@ on:
       branch:
         description: "Branch which should be deployed"
         default: "develop"
-        required: true
+        required: false
         type: string
       e2e:
         description: "Set to true to run end to end tests after deployment"
