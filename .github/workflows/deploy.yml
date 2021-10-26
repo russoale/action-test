@@ -1,0 +1,70 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        description: "Test env to which should be deployed"
+        required: true
+        type: string
+      branch:
+        description: "Branch which should be deployed"
+        default: "develop"
+        required: true
+        type: string
+      e2e:
+        description: "Set to true to run end to end tests after deployment"
+        default: false
+        required: false
+        type: boolean
+  repository_dispatch:
+    types:
+      - delpoy-asset
+
+jobs:
+
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.extract.outputs.env }}
+      branch: ${{ steps.extract.outputs.branch }}
+      e2e: ${{ steps.extract.outputs.e2e }}
+    steps:
+      - name: Determine env
+        id: env
+        run: >
+          if [[ ${{ github.event_name }} == 'workflow_call' ]];
+          then echo "##[set-output name=env;]$(echo ${{inputs.env}})";
+          else echo "##[set-output name=env;]$(echo ${{github.event.client_payload.env}})";
+          fi
+
+      - name: Determine branch
+        id: branch
+        run: >
+          if [[ ${{ github.event_name }} == 'workflow_call' ]];
+          then echo "##[set-output name=branch;]$(echo ${{inputs.branch}})";
+          else echo "##[set-output name=branch;]$(echo ${{github.event.client_payload.branch}})";
+          fi
+
+      - name: Determine e2e
+        id: e2e
+        run: >
+          if [[ ${{ github.event_name }} == 'workflow_call' ]];
+          then echo "##[set-output name=e2e;]$(echo ${{inputs.e2e}})";
+          else echo "##[set-output name=e2e;]$(echo ${{github.event.client_payload.e2e}})";
+          fi
+
+
+  print:
+    runs-on: ubuntu-latest
+    needs: config
+    environment: ${{ needs.config.outputs.env }}
+    steps:
+      - name: env
+        run: echo "${{ needs.config.outputs.env }}"
+
+      - name: branch
+        run: echo "${{ needs.config.outputs.branch }}"
+
+      - name: e2e
+        run: echo "${{ needs.config.outputs.e2e }}"
