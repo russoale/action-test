@@ -21,14 +21,14 @@ jobs:
       env: develop
   
   alpha:
-    needs: develop
+    needs: test
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       env: alpha
       e2e: true
 
   beta:
-    needs: alpha
+    needs: test
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       env: beta
