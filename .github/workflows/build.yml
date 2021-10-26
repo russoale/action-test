@@ -25,7 +25,7 @@ jobs:
 
   develop:
     needs: [ extract ]
-    if: needs.extract.outputs.branch == 'develop'
+    if: needs.extract.outputs.branch == 'test'
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       sha: ${{ github.sha }}
@@ -33,6 +33,7 @@ jobs:
   
   alpha:
     needs: [ extract, test]
+    if: needs.extract.outputs.branch == 'main'
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       sha: ${{ github.sha }}
@@ -41,6 +42,7 @@ jobs:
 
   beta:
     needs: [ extract, test ]
+    if: needs.extract.outputs.branch == 'si'
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       sha: ${{ github.sha }}
