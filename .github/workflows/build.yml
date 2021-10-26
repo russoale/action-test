@@ -14,23 +14,26 @@ jobs:
       - name: Test
         run: echo "run tests"
 
-  deploy-to-test:
+  develop:
+    needs: test
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
-      env: test
-      branch: test
+      env: develop
+      branch: develop
       e2e: true
   
-  deploy-to-si:
+  alpha:
+    needs: develop
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
-      env: si
-      branch: si
+      env: alpha
+      branch: alpha
       e2e: false
 
-  deploy-to-main:
+  beta:
+    needs: alpha
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
-      env: main
-      branch: main
+      env: beta
+      branch: beta
       e2e: true

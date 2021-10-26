@@ -26,9 +26,9 @@ jobs:
   config:
     runs-on: ubuntu-latest
     outputs:
-      env: ${{ steps.extract.outputs.env }}
-      branch: ${{ steps.extract.outputs.branch }}
-      e2e: ${{ steps.extract.outputs.e2e }}
+      env: ${{ steps.env.outputs.env }}
+      branch: ${{ steps.branch.outputs.branch }}
+      e2e: ${{ steps.e2e.outputs.e2e }}
     steps:
       - name: Determine env
         id: env
@@ -61,7 +61,11 @@ jobs:
     environment: ${{ needs.config.outputs.env }}
     steps:
       - name: env
-        run: echo "${{ needs.config.outputs.env }}"
+        run: |
+          echo "${{ needs.config.outputs.env }}"
+          echo $ECHO
+        secrets:
+          ECHO: ${{ secrets.ECHO }}
 
       - name: branch
         run: echo "${{ needs.config.outputs.branch }}"
