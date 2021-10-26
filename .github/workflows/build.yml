@@ -4,7 +4,16 @@ on:
   - push
 
 jobs:
-  
+
+  extract:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.extract.outputs.branch }}
+    steps:
+      - name: Extract branch name
+        id: extract
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -15,14 +24,15 @@ jobs:
         run: echo "run tests"
 
   develop:
-    needs: test
+    needs: [ extract ]
+    if: needs.extract.outputs.branch == 'develop'
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       sha: ${{ github.sha }}
       env: develop
   
   alpha:
-    needs: test
+    needs: [ extract, test]
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       sha: ${{ github.sha }}
@@ -30,7 +40,7 @@ jobs:
       e2e: true
 
   beta:
-    needs: test
+    needs: [ extract, test ]
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
       sha: ${{ github.sha }}
