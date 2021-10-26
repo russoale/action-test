@@ -4,7 +4,8 @@ on:
   - push
 
 jobs:
-  determine-environment:
+  
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,23 +14,23 @@ jobs:
       - name: Test
         run: echo "run tests"
 
-      - name: Deploy to test
-        uses: russoale/action-test/.github/workflows/deploy.yml@test
-        with:
-          env: test
-          branch: test
-          e2e: true
-      
-      - name: Deploy to si
-        uses: russoale/action-test/.github/workflows/deploy.yml@test
-        with:
-          env: si
-          branch: si
-          e2e: false
+  deploy-to-test:
+    uses: russoale/action-test/.github/workflows/deploy.yml@test
+    with:
+      env: test
+      branch: test
+      e2e: true
+  
+  deploy-to-si:
+    uses: russoale/action-test/.github/workflows/deploy.yml@test
+    with:
+      env: si
+      branch: si
+      e2e: false
 
-      - name: Deploy to test
-        uses: russoale/action-test/.github/workflows/deploy.yml@test
-        with:
-          env: main
-          branch: main
-          e2e: true
+  deploy-to-main:
+    uses: russoale/action-test/.github/workflows/deploy.yml@test
+    with:
+      env: main
+      branch: main
+      e2e: true
