@@ -18,12 +18,14 @@ jobs:
     needs: test
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
+      sha: ${{ github.sha }}
       env: develop
   
   alpha:
     needs: test
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
+      sha: ${{ github.sha }}
       env: alpha
       e2e: true
 
@@ -31,6 +33,7 @@ jobs:
     needs: test
     uses: russoale/action-test/.github/workflows/deploy.yml@test
     with:
+      sha: ${{ github.sha }}
       env: beta
       branch: master
       e2e: true

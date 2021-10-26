@@ -3,6 +3,10 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      sha:
+        description: "SHA specifying the docker image tag"
+        required: true
+        type: string
       env:
         description: "Test env to which should be deployed"
         required: true
@@ -26,10 +30,19 @@ jobs:
   config:
     runs-on: ubuntu-latest
     outputs:
+      sha: ${{ steps.sha.outputs.sha }}
       env: ${{ steps.env.outputs.env }}
       branch: ${{ steps.branch.outputs.branch }}
       e2e: ${{ steps.e2e.outputs.e2e }}
     steps:
+      - name: Determine SHA
+        id: sha
+        run: >
+          if [[ ${{ github.event_name }} == 'repository_dispatch' ]];
+          then echo "##[set-output name=sha;]$(echo "ASSET")";
+          else echo "##[set-output name=sha;]$(echo ${{inputs.sha}})";
+          fi
+      
       - name: Determine env
         id: env
         run: >
@@ -54,12 +67,38 @@ jobs:
           else echo "##[set-output name=e2e;]$(echo ${{inputs.e2e}})";
           fi
 
-
-  delpoy:
+  delpoy-asset:
+    if: github.event_name == 'repository_dispatch'
     runs-on: ubuntu-latest
     needs: config
     environment: ${{ needs.config.outputs.env }}
     steps:
+      - name: sha
+        run: echo "${{ needs.config.outputs.sha }}"
+      
+      - name: env
+        run: |
+          echo "${{ needs.config.outputs.env }}"
+          echo $ECHO
+        env:
+          ECHO: ${{ secrets.ECHO }}
+
+      - name: branch
+        run: echo "${{ needs.config.outputs.branch }}"
+
+      - name: e2e
+        run: echo "${{ needs.config.outputs.e2e }}"
+
+
+  delpoy:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: config
+    environment: ${{ needs.config.outputs.env }}
+    steps:
+      - name: sha
+        run: echo "${{ needs.config.outputs.sha }}"
+      
       - name: env
         run: |
           echo "${{ needs.config.outputs.env }}"
@@ -75,9 +114,13 @@ jobs:
   
   e2e:
     runs-on: ubuntu-latest
-    needs: delpoy
+    needs: [ delpoy-asset, delpoy]
     environment: ${{ needs.config.outputs.env }}
-    if: needs.config.outputs.e2e == 'true'
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') && 
+      needs.config.outputs.e2e == 'true'
     steps:
       - name: e2e
         run: echo "run e2e"
