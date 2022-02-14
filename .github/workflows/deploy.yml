@@ -60,8 +60,8 @@ jobs:
           fi
 
       - name: Determine e2e
+        if: inputs.e2e
         id: e2e
-        if: !inputs.e2e
         run: >
           if [[ ${{ github.event_name }} == 'repository_dispatch' ]];
           then echo "##[set-output name=e2e;]$(echo ${{github.event.client_payload.e2e}})";

@@ -38,7 +38,7 @@ jobs:
     with:
       sha: ${{ github.sha }}
       env: alpha
-      e2e: true
+      e2e: false
 
   beta:
     needs: [ extract, test ]
