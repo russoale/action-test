@@ -34,7 +34,7 @@ jobs:
   alpha:
     needs: [ extract, test]
     if: needs.extract.outputs.branch == 'main'
-    uses: russoale/action-test/.github/workflows/deploy.yml@test
+    uses: russoale/action-test/.github/workflows/deploy.yml@main
     with:
       sha: ${{ github.sha }}
       env: alpha
