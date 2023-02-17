@@ -1,14 +1,12 @@
----
-name: "🚀 Feature"
-about: ""
-title: ''
-labels: 'i: enhancement, i: needs triage'
-assignees: ''
 
----
+type: 🚀 Feature | 🐛 Bug
+
+Jira: https://celonis.atlassian.net/browse/TM-XXXX
+
+
 
 #### links
-Jira: https://celonis.atlassian.net/browse/TM-XXXX
+
 
 
 
