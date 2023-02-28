@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "SHA specifying the docker image tag"
+        required: true
+        type: string
+      env:
+        description: "Test env to which should be deployed"
+        required: true
+        type: choice
+        options:
+          - alpha
+          - beta
+
+run-name: "${{ inputs.env }}: version ${{ inputs.sha }}"
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
