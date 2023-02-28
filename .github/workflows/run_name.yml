@@ -15,7 +15,7 @@ on:
           - alpha
           - beta
 
-run-name: "${{ inputs.env }}: version ${{ inputs.sha }}"
+run-name: "Deploy to ${{ inputs.env }}: ${{ inputs.sha }}"
 
 jobs:
 
